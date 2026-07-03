@@ -1,0 +1,31 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+
+function App() {
+  return (
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <div className="card shadow-sm border-0">
+            <div className="card-body p-5">
+              <h1 className="display-6 fw-bold mb-3">OctoFit Tracker</h1>
+              <p className="lead text-muted mb-4">
+                A modern multi-tier fitness tracking experience for teams and individuals.
+              </p>
+              <div className="d-flex gap-3 flex-wrap">
+                <a className="btn btn-primary" href="http://localhost:8000/api/health">
+                  Check API Health
+                </a>
+                <a className="btn btn-outline-secondary" href="https://vite.dev/guide/">
+                  Vite Guide
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
