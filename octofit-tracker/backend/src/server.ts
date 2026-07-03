@@ -34,5 +34,8 @@ mongoose
   })
   .catch((error) => {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`Backend listening on port ${port} without a database connection.`);
+      console.log(`API base URL: ${apiBaseUrl}`);
+    });
   });
