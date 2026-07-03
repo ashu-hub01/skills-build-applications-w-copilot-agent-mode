@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchResource, normalizeItems } from '../lib/api.js';
+import { normalizeItems } from '../lib/api.js';
+
+const getTeamsUrl = () => {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const baseUrl = codespaceName ? `https://${codespaceName}-8000.app.github.dev` : 'http://127.0.0.1:8000';
+  return `${baseUrl}/api/teams/`;
+};
 
 function Teams() {
   const [teams, setTeams] = useState([]);
@@ -11,7 +17,13 @@ function Teams() {
 
     const loadTeams = async () => {
       try {
-        const payload = await fetchResource('teams');
+        const response = await fetch(getTeamsUrl(), {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        const payload = await response.json();
         if (!cancelled) {
           setTeams(normalizeItems(payload));
         }

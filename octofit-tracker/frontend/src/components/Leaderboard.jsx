@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchResource, normalizeItems } from '../lib/api.js';
+import { normalizeItems } from '../lib/api.js';
+
+const getLeaderboardUrl = () => {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const baseUrl = codespaceName ? `https://${codespaceName}-8000.app.github.dev` : 'http://127.0.0.1:8000';
+  return `${baseUrl}/api/leaderboard/`;
+};
 
 function Leaderboard() {
   const [entries, setEntries] = useState([]);
@@ -11,7 +17,13 @@ function Leaderboard() {
 
     const loadLeaderboard = async () => {
       try {
-        const payload = await fetchResource('leaderboard');
+        const response = await fetch(getLeaderboardUrl(), {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        const payload = await response.json();
         if (!cancelled) {
           setEntries(normalizeItems(payload));
         }

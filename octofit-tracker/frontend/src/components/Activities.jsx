@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchResource, normalizeItems } from '../lib/api.js';
+import { normalizeItems } from '../lib/api.js';
+
+const getActivitiesUrl = () => {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const baseUrl = codespaceName ? `https://${codespaceName}-8000.app.github.dev` : 'http://127.0.0.1:8000';
+  return `${baseUrl}/api/activities/`;
+};
 
 function Activities() {
   const [activities, setActivities] = useState([]);
@@ -11,7 +17,13 @@ function Activities() {
 
     const loadActivities = async () => {
       try {
-        const payload = await fetchResource('activities');
+        const response = await fetch(getActivitiesUrl(), {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        const payload = await response.json();
         if (!cancelled) {
           setActivities(normalizeItems(payload));
         }
