@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import {
   Activity,
   LeaderboardEntry,
@@ -9,7 +9,7 @@ import {
 
 const router = Router();
 
-const safeList = async (res, loader) => {
+const safeList = async <T>(res: Response, loader: () => Promise<T[]>) => {
   try {
     const items = await loader();
     res.json(items);
